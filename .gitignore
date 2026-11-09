@@ -1,0 +1,19 @@
+# Secrets: API keys live in .env
+.env
+.env.*
+!.env.example
+*.key
+
+# Raw API cache and downloaded attachments (contain commenter names)
+ftc_data/
+**/comment_json/
+**/attachments/
+*.zip
+
+# Python and notebook clutter
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+.venv/
+venv/
+.DS_Store
