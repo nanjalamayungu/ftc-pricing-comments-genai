@@ -1,0 +1,16 @@
+pandas==3.0.5
+numpy==1.26.4
+scipy==1.14.1
+statsmodels==0.15.0
+scikit-learn==1.4.2
+matplotlib==3.8.4
+vaderSentiment==3.3.2
+openpyxl==3.1.5
+anthropic==2.3.0
+python-dotenv==1.2.4
+requests==2.34.2
+pypdf==7.0.0
+python-docx==1.2.0
+ipykernel==7.3.0
+nbconvert==7.17.1
+seaborn==0.13.2
