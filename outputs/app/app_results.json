@@ -1,0 +1,1160 @@
+{
+ "settings": {
+  "model": "claude-haiku-5-5",
+  "effort": "low",
+  "max_output_tokens": 4096,
+  "prompt_version": "v2",
+  "price_in_per_mtok": 0.1,
+  "price_out_per_mtok": 0.5,
+  "seed": 20261027,
+  "best": "Claude zero-shot",
+  "best_variant": "zeroshot",
+  "system_prompt": "You classify public comments sent to the U.S. Federal Trade Commission (FTC) about its proposed enforcement policy on personalized pricing (prices set using a consumer's personal data). The proposal does NOT ban personalized pricing: it says undisclosed or misleading personalization may be unlawful and emphasizes clear disclosure that a price is personalized, why, and what data were used.\n\nSTANCE: ask 'What does this commenter want the FTC/government to do?' Choose exactly one:\n- stronger_action: Supports FTC/government intervention but explicitly wants a materially stronger response than the proposed disclosure/enforcement approach (ban or prohibit personalized pricing; 'disclosure is not enough'; prohibit individualized markups; mandatory opt-in).\n- support_as_proposed: Broadly supports the FTC's proposed disclosure/enforcement approach and does not ask for a materially stronger or narrower response (clear notice that a price is personalized; explain the basis and data used).\n- limit_or_oppose_intervention: Argues the FTC response goes too far, should be narrowed or not adopted, imposes unjustified burdens, or exceeds FTC authority.\n- mixed_or_conditional: Supports some intervention but draws a substantive boundary (for example, personalized discounts acceptable but personalized markups should be prohibited).\n- unclear: The desired FTC/government response cannot be determined reliably (only says personalized pricing is bad or unfair; too little information; misunderstands the proposal with no recoverable desired action).\n\nREASONS: ask 'What substantive arguments does the commenter use to justify that position?' Choose zero or more:\n- privacy_data_use: code when: Personal data collection or use is part of the argument: surveillance, tracking, profiling, consent, browsing/location/purchase data, data brokers. Do not code when: The comment merely mentions that an algorithm uses data.\n- transparency_disclosure: code when: Hidden or opaque personalized pricing, notice, disclosure, or explaining what affected the price. Do not code when: The comment only repeats the proposal's disclosure requirement without endorsing or criticizing it.\n- fairness_discrimination_consumer_harm: code when: Exploitation, unfairness, discrimination, vulnerable consumers, necessities, inability to shop around, manipulation, or concrete consumer harm. Do not code when: Used as a catch-all for any negative comment; the harm logic must be stated.\n- pricing_affordability_equal_treatment: code when: The price outcome itself: different people paying different prices, individualized markups, affordability, gouging, equal or uniform pricing. Do not code when: Prices are mentioned without being part of the argument.\n- competition_business_economics: code when: A genuine market or economic argument: competition, market power, innovation, efficiency, business burden, benefits of discounts. Do not code when: Firms, profits or corporations are merely mentioned.\n- legal_authority_policy_scope: code when: FTC authority, Section 5, jurisdiction, constitutionality, statutory limits, or which sectors or practices should be covered or exempt. Do not code when: The comment only says 'the FTC should act' or 'use its authority'.\n- other: code when: A substantive policy reason that does not fit any category above. Do not code when: The comment is vague; if no reason is expressed, code no reason.\n\nRULES:\n- A direct request for a ban or materially stronger restriction overrides generic praise for the FTC -> stronger_action.\n- Support for disclosure/enforcement plus minor implementation suggestions remains support_as_proposed.\n- A genuine carve-out or two-sided position (discounts yes, individualized markups no) -> mixed_or_conditional.\n- Use limit_or_oppose_intervention only when the commenter wants less or narrower FTC intervention. Disliking personalized pricing is not opposition to the FTC.\n- If the commenter misunderstands the proposal and the desired response is not otherwise clear -> unclear.\n- Tone does not determine stance. Anger or words such as 'unfair' are not stance labels by themselves.\n- Saying personalized pricing is unfair or wrong is not automatically a request for action; direct requests to ban, stop, protect consumers or strengthen the remedy count as stronger_action.\n- Substantive-reason test: code a reason only if removing that issue would remove one of the commenter's actual reasons.\n- If a comment gets four or more reasons, reread it and check every reason passes the substantive-reason test.\n\nReturn ONLY a JSON object, with no other text:\n{\"stance\": \"<one stance label>\", \"reasons\": [\"<zero or more reason labels>\"], \"evidence_quote\": \"<up to 20 words copied exactly from the comment that best supports the stance>\", \"confidence\": \"<low, medium or high>\"}"
+ },
+ "dictionary": {
+  "stance": {
+   "stronger_action": "Supports FTC/government intervention but explicitly wants a materially stronger response than the proposed disclosure/enforcement approach (ban or prohibit personalized pricing; 'disclosure is not enough'; prohibit individualized markups; mandatory opt-in).",
+   "support_as_proposed": "Broadly supports the FTC's proposed disclosure/enforcement approach and does not ask for a materially stronger or narrower response (clear notice that a price is personalized; explain the basis and data used).",
+   "limit_or_oppose_intervention": "Argues the FTC response goes too far, should be narrowed or not adopted, imposes unjustified burdens, or exceeds FTC authority.",
+   "mixed_or_conditional": "Supports some intervention but draws a substantive boundary (for example, personalized discounts acceptable but personalized markups should be prohibited).",
+   "unclear": "The desired FTC/government response cannot be determined reliably (only says personalized pricing is bad or unfair; too little information; misunderstands the proposal with no recoverable desired action)."
+  },
+  "reasons": {
+   "privacy_data_use": "Personal data collection or use is part of the argument: surveillance, tracking, profiling, consent, browsing/location/purchase data, data brokers.",
+   "transparency_disclosure": "Hidden or opaque personalized pricing, notice, disclosure, or explaining what affected the price.",
+   "fairness_discrimination_consumer_harm": "Exploitation, unfairness, discrimination, vulnerable consumers, necessities, inability to shop around, manipulation, or concrete consumer harm.",
+   "pricing_affordability_equal_treatment": "The price outcome itself: different people paying different prices, individualized markups, affordability, gouging, equal or uniform pricing.",
+   "competition_business_economics": "A genuine market or economic argument: competition, market power, innovation, efficiency, business burden, benefits of discounts.",
+   "legal_authority_policy_scope": "FTC authority, Section 5, jurisdiction, constitutionality, statutory limits, or which sectors or practices should be covered or exempt.",
+   "other": "A substantive policy reason that does not fit any category above."
+  }
+ },
+ "thresholds": {
+  "min_human_kappa": 0.6,
+  "min_stance_macro_f1": 0.7,
+  "min_stance_class_recall": 0.6,
+  "min_reason_micro_f1": 0.7,
+  "min_class_support": 5,
+  "max_low_confidence_share": 0.15,
+  "max_invalid_share": 0.02,
+  "min_quote_found_share": 0.95,
+  "min_stability": 0.9,
+  "max_length_error_ratio": 1.25,
+  "audit_share": 0.05
+ },
+ "data": {
+  "comments": 1566,
+  "docket_total": 3706,
+  "median_words": 28.0,
+  "mean_words": 56.48850574712644,
+  "near_duplicates": 59,
+  "duplicate_groups": 22,
+  "vader": {
+   "negative": 0.5593869731800766,
+   "positive": 0.3205619412515964,
+   "neutral": 0.12005108556832694
+  },
+  "topics": {
+   "Corporations and money": 0.24521072796934865,
+   "Stop / make it illegal": 0.16219667943805874,
+   "Ban surveillance pricing": 0.13729246487867178,
+   "Different prices for different people": 0.12132822477650064,
+   "Price gouging": 0.12005108556832694,
+   "Personal data use": 0.10472541507024266,
+   "Short 'stop it' demands": 0.06257982120051085,
+   "Disclosure isn't enough": 0.04661558109833972
+  },
+  "ban_topics": [
+   "Ban surveillance pricing",
+   "Stop / make it illegal",
+   "Short 'stop it' demands",
+   "Disclosure isn't enough"
+  ]
+ },
+ "human": {
+  "stance": [
+   {
+    "index": 0,
+    "field": "stance",
+    "n": 80,
+    "raw_agreement": 0.975,
+    "kappa": 0.954,
+    "kappa_ci_low": 0.88,
+    "kappa_ci_high": 1.0,
+    "meets_threshold": true
+   }
+  ],
+  "reasons": [
+   {
+    "index": 0,
+    "reason": "privacy_data_use",
+    "marked_by_coder1": 32,
+    "marked_by_coder2": 29,
+    "raw_agreement": 0.962,
+    "kappa": 0.921
+   },
+   {
+    "index": 1,
+    "reason": "transparency_disclosure",
+    "marked_by_coder1": 10,
+    "marked_by_coder2": 9,
+    "raw_agreement": 0.988,
+    "kappa": 0.94
+   },
+   {
+    "index": 2,
+    "reason": "fairness_discrimination_consumer_harm",
+    "marked_by_coder1": 31,
+    "marked_by_coder2": 25,
+    "raw_agreement": 0.9,
+    "kappa": 0.782
+   },
+   {
+    "index": 3,
+    "reason": "pricing_affordability_equal_treatment",
+    "marked_by_coder1": 39,
+    "marked_by_coder2": 41,
+    "raw_agreement": 0.925,
+    "kappa": 0.85
+   },
+   {
+    "index": 4,
+    "reason": "competition_business_economics",
+    "marked_by_coder1": 7,
+    "marked_by_coder2": 6,
+    "raw_agreement": 0.988,
+    "kappa": 0.916
+   },
+   {
+    "index": 5,
+    "reason": "legal_authority_policy_scope",
+    "marked_by_coder1": 3,
+    "marked_by_coder2": 4,
+    "raw_agreement": 0.988,
+    "kappa": 0.851
+   },
+   {
+    "index": 6,
+    "reason": "other",
+    "marked_by_coder1": 2,
+    "marked_by_coder2": 2,
+    "raw_agreement": 0.975,
+    "kappa": 0.487
+   }
+  ],
+  "mean_jaccard": 0.8652083333333334
+ },
+ "stance_scores": [
+  {
+   "model": "Claude zero-shot",
+   "accuracy": 0.9,
+   "macro_f1": 0.925,
+   "f1_ci_low": 0.862,
+   "f1_ci_high": 0.973,
+   "macro_f1_all_present": 0.637,
+   "kappa_vs_gold": 0.822
+  },
+  {
+   "model": "Claude few-shot",
+   "accuracy": 0.888,
+   "macro_f1": 0.895,
+   "f1_ci_low": 0.822,
+   "f1_ci_high": 0.954,
+   "macro_f1_all_present": 0.691,
+   "kappa_vs_gold": 0.795
+  },
+  {
+   "model": "TF-IDF + logistic regression",
+   "accuracy": 0.638,
+   "macro_f1": 0.658,
+   "f1_ci_low": 0.55,
+   "f1_ci_high": 0.758,
+   "macro_f1_all_present": 0.263,
+   "kappa_vs_gold": 0.318
+  },
+  {
+   "model": "Topic baseline",
+   "accuracy": 0.55,
+   "macro_f1": 0.557,
+   "f1_ci_low": 0.444,
+   "f1_ci_high": 0.665,
+   "macro_f1_all_present": 0.223,
+   "kappa_vs_gold": 0.155
+  },
+  {
+   "model": "VADER baseline",
+   "accuracy": 0.375,
+   "macro_f1": 0.429,
+   "f1_ci_low": 0.309,
+   "f1_ci_high": 0.542,
+   "macro_f1_all_present": 0.172,
+   "kappa_vs_gold": 0.025
+  }
+ ],
+ "stance_per_class": [
+  {
+   "model": "VADER baseline",
+   "stance": "stronger_action",
+   "precision": 0.512,
+   "recall": 0.525,
+   "f1": 0.519,
+   "gold_examples": 40
+  },
+  {
+   "model": "VADER baseline",
+   "stance": "support_as_proposed",
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "gold_examples": 2
+  },
+  {
+   "model": "VADER baseline",
+   "stance": "limit_or_oppose_intervention",
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "gold_examples": 1
+  },
+  {
+   "model": "VADER baseline",
+   "stance": "mixed_or_conditional",
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "gold_examples": 1
+  },
+  {
+   "model": "VADER baseline",
+   "stance": "unclear",
+   "precision": 0.529,
+   "recall": 0.25,
+   "f1": 0.34,
+   "gold_examples": 36
+  },
+  {
+   "model": "Topic baseline",
+   "stance": "stronger_action",
+   "precision": 0.607,
+   "recall": 0.425,
+   "f1": 0.5,
+   "gold_examples": 40
+  },
+  {
+   "model": "Topic baseline",
+   "stance": "support_as_proposed",
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "gold_examples": 2
+  },
+  {
+   "model": "Topic baseline",
+   "stance": "limit_or_oppose_intervention",
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "gold_examples": 1
+  },
+  {
+   "model": "Topic baseline",
+   "stance": "mixed_or_conditional",
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "gold_examples": 1
+  },
+  {
+   "model": "Topic baseline",
+   "stance": "unclear",
+   "precision": 0.519,
+   "recall": 0.75,
+   "f1": 0.614,
+   "gold_examples": 36
+  },
+  {
+   "model": "TF-IDF + logistic regression",
+   "stance": "stronger_action",
+   "precision": 0.684,
+   "recall": 0.65,
+   "f1": 0.667,
+   "gold_examples": 40
+  },
+  {
+   "model": "TF-IDF + logistic regression",
+   "stance": "support_as_proposed",
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "gold_examples": 2
+  },
+  {
+   "model": "TF-IDF + logistic regression",
+   "stance": "limit_or_oppose_intervention",
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "gold_examples": 1
+  },
+  {
+   "model": "TF-IDF + logistic regression",
+   "stance": "mixed_or_conditional",
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "gold_examples": 1
+  },
+  {
+   "model": "TF-IDF + logistic regression",
+   "stance": "unclear",
+   "precision": 0.61,
+   "recall": 0.694,
+   "f1": 0.649,
+   "gold_examples": 36
+  },
+  {
+   "model": "Claude zero-shot",
+   "stance": "stronger_action",
+   "precision": 0.927,
+   "recall": 0.95,
+   "f1": 0.938,
+   "gold_examples": 40
+  },
+  {
+   "model": "Claude zero-shot",
+   "stance": "support_as_proposed",
+   "precision": 1.0,
+   "recall": 1.0,
+   "f1": 1.0,
+   "gold_examples": 2
+  },
+  {
+   "model": "Claude zero-shot",
+   "stance": "limit_or_oppose_intervention",
+   "precision": 0.2,
+   "recall": 1.0,
+   "f1": 0.333,
+   "gold_examples": 1
+  },
+  {
+   "model": "Claude zero-shot",
+   "stance": "mixed_or_conditional",
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "gold_examples": 1
+  },
+  {
+   "model": "Claude zero-shot",
+   "stance": "unclear",
+   "precision": 0.969,
+   "recall": 0.861,
+   "f1": 0.912,
+   "gold_examples": 36
+  },
+  {
+   "model": "Claude few-shot",
+   "stance": "stronger_action",
+   "precision": 0.944,
+   "recall": 0.85,
+   "f1": 0.895,
+   "gold_examples": 40
+  },
+  {
+   "model": "Claude few-shot",
+   "stance": "support_as_proposed",
+   "precision": 1.0,
+   "recall": 1.0,
+   "f1": 1.0,
+   "gold_examples": 2
+  },
+  {
+   "model": "Claude few-shot",
+   "stance": "limit_or_oppose_intervention",
+   "precision": 0.5,
+   "recall": 1.0,
+   "f1": 0.667,
+   "gold_examples": 1
+  },
+  {
+   "model": "Claude few-shot",
+   "stance": "mixed_or_conditional",
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "gold_examples": 1
+  },
+  {
+   "model": "Claude few-shot",
+   "stance": "unclear",
+   "precision": 0.85,
+   "recall": 0.944,
+   "f1": 0.895,
+   "gold_examples": 36
+  }
+ ],
+ "confusion": {
+  "labels": [
+   "stronger_action",
+   "support_as_proposed",
+   "limit_or_oppose_intervention",
+   "mixed_or_conditional",
+   "unclear"
+  ],
+  "matrix": [
+   [
+    38,
+    0,
+    1,
+    0,
+    1
+   ],
+   [
+    0,
+    2,
+    0,
+    0,
+    0
+   ],
+   [
+    0,
+    0,
+    1,
+    0,
+    0
+   ],
+   [
+    1,
+    0,
+    0,
+    0,
+    0
+   ],
+   [
+    2,
+    0,
+    3,
+    0,
+    31
+   ]
+  ]
+ },
+ "mcnemar_p": 1.0,
+ "mdd": [
+  {
+   "comparison": "Claude zero-shot vs Claude few-shot",
+   "observed_gap": 0.0302813133,
+   "mdd": 0.1110946224,
+   "gap_ci_low": -0.0460480317,
+   "gap_ci_high": 0.1099255449,
+   "real_difference": false
+  },
+  {
+   "comparison": "Claude zero-shot vs TF-IDF + logistic regression",
+   "observed_gap": 0.2670094974,
+   "mdd": 0.1481386466,
+   "gap_ci_low": 0.1672014064,
+   "gap_ci_high": 0.3724024202,
+   "real_difference": true
+  },
+  {
+   "comparison": "Claude zero-shot vs Topic baseline",
+   "observed_gap": 0.3681999736,
+   "mdd": 0.1778353986,
+   "gap_ci_low": 0.2435890685,
+   "gap_ci_high": 0.4929506131,
+   "real_difference": true
+  },
+  {
+   "comparison": "Claude zero-shot vs VADER baseline",
+   "observed_gap": 0.4959475754,
+   "mdd": 0.1709360819,
+   "gap_ci_low": 0.3793194535,
+   "gap_ci_high": 0.6174055744,
+   "real_difference": true
+  }
+ ],
+ "mdd_single": 0.07937386436397216,
+ "reason_scores": [
+  {
+   "model": "Topic baseline",
+   "micro_f1": 0.387,
+   "micro_f1_ci_low": 0.309,
+   "micro_f1_ci_high": 0.462,
+   "macro_f1_judged_reasons": 0.276,
+   "exact_set_match": 0.188,
+   "mean_jaccard": 0.329
+  },
+  {
+   "model": "Claude zero-shot",
+   "micro_f1": 0.78,
+   "micro_f1_ci_low": 0.721,
+   "micro_f1_ci_high": 0.833,
+   "macro_f1_judged_reasons": 0.766,
+   "exact_set_match": 0.462,
+   "mean_jaccard": 0.647
+  },
+  {
+   "model": "Claude few-shot",
+   "micro_f1": 0.836,
+   "micro_f1_ci_low": 0.787,
+   "micro_f1_ci_high": 0.877,
+   "macro_f1_judged_reasons": 0.783,
+   "exact_set_match": 0.562,
+   "mean_jaccard": 0.751
+  }
+ ],
+ "reason_per_class": [
+  {
+   "model": "Topic baseline",
+   "reason": "privacy_data_use",
+   "precision": 0.833,
+   "recall": 0.156,
+   "f1": 0.263,
+   "gold_examples": 32
+  },
+  {
+   "model": "Topic baseline",
+   "reason": "transparency_disclosure",
+   "precision": 0.5,
+   "recall": 0.1,
+   "f1": 0.167,
+   "gold_examples": 10
+  },
+  {
+   "model": "Topic baseline",
+   "reason": "fairness_discrimination_consumer_harm",
+   "precision": 0.348,
+   "recall": 0.258,
+   "f1": 0.296,
+   "gold_examples": 31
+  },
+  {
+   "model": "Topic baseline",
+   "reason": "pricing_affordability_equal_treatment",
+   "precision": 0.913,
+   "recall": 0.512,
+   "f1": 0.656,
+   "gold_examples": 41
+  },
+  {
+   "model": "Topic baseline",
+   "reason": "competition_business_economics",
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "gold_examples": 7
+  },
+  {
+   "model": "Topic baseline",
+   "reason": "legal_authority_policy_scope",
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "gold_examples": 4
+  },
+  {
+   "model": "Topic baseline",
+   "reason": "other",
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "gold_examples": 2
+  },
+  {
+   "model": "Claude zero-shot",
+   "reason": "privacy_data_use",
+   "precision": 0.771,
+   "recall": 0.844,
+   "f1": 0.806,
+   "gold_examples": 32
+  },
+  {
+   "model": "Claude zero-shot",
+   "reason": "transparency_disclosure",
+   "precision": 1.0,
+   "recall": 0.5,
+   "f1": 0.667,
+   "gold_examples": 10
+  },
+  {
+   "model": "Claude zero-shot",
+   "reason": "fairness_discrimination_consumer_harm",
+   "precision": 0.788,
+   "recall": 0.839,
+   "f1": 0.812,
+   "gold_examples": 31
+  },
+  {
+   "model": "Claude zero-shot",
+   "reason": "pricing_affordability_equal_treatment",
+   "precision": 0.886,
+   "recall": 0.756,
+   "f1": 0.816,
+   "gold_examples": 41
+  },
+  {
+   "model": "Claude zero-shot",
+   "reason": "competition_business_economics",
+   "precision": 1.0,
+   "recall": 0.571,
+   "f1": 0.727,
+   "gold_examples": 7
+  },
+  {
+   "model": "Claude zero-shot",
+   "reason": "legal_authority_policy_scope",
+   "precision": 1.0,
+   "recall": 0.75,
+   "f1": 0.857,
+   "gold_examples": 4
+  },
+  {
+   "model": "Claude zero-shot",
+   "reason": "other",
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "gold_examples": 2
+  },
+  {
+   "model": "Claude few-shot",
+   "reason": "privacy_data_use",
+   "precision": 0.967,
+   "recall": 0.906,
+   "f1": 0.935,
+   "gold_examples": 32
+  },
+  {
+   "model": "Claude few-shot",
+   "reason": "transparency_disclosure",
+   "precision": 0.8,
+   "recall": 0.4,
+   "f1": 0.533,
+   "gold_examples": 10
+  },
+  {
+   "model": "Claude few-shot",
+   "reason": "fairness_discrimination_consumer_harm",
+   "precision": 0.829,
+   "recall": 0.935,
+   "f1": 0.879,
+   "gold_examples": 31
+  },
+  {
+   "model": "Claude few-shot",
+   "reason": "pricing_affordability_equal_treatment",
+   "precision": 0.85,
+   "recall": 0.829,
+   "f1": 0.84,
+   "gold_examples": 41
+  },
+  {
+   "model": "Claude few-shot",
+   "reason": "competition_business_economics",
+   "precision": 1.0,
+   "recall": 0.571,
+   "f1": 0.727,
+   "gold_examples": 7
+  },
+  {
+   "model": "Claude few-shot",
+   "reason": "legal_authority_policy_scope",
+   "precision": 1.0,
+   "recall": 0.5,
+   "f1": 0.667,
+   "gold_examples": 4
+  },
+  {
+   "model": "Claude few-shot",
+   "reason": "other",
+   "precision": 0.0,
+   "recall": 0.0,
+   "f1": 0.0,
+   "gold_examples": 2
+  }
+ ],
+ "stability": 0.9,
+ "length_slices": [
+  {
+   "length": "short (<=15 words)",
+   "comments": 28,
+   "error_rate": 0.0357142857,
+   "ratio_vs_best": 1.0,
+   "flag": false
+  },
+  {
+   "length": "medium (16-50)",
+   "comments": 28,
+   "error_rate": 0.0714285714,
+   "ratio_vs_best": 2.0,
+   "flag": true
+  },
+  {
+   "length": "long (>50)",
+   "comments": 24,
+   "error_rate": 0.2083333333,
+   "ratio_vs_best": 5.8333333333,
+   "flag": true
+  }
+ ],
+ "confidence_errors": [
+  {
+   "confidence": "high",
+   "comments": 32,
+   "stance_error_rate": 0.03125
+  },
+  {
+   "confidence": "low",
+   "comments": 12,
+   "stance_error_rate": 0.25
+  },
+  {
+   "confidence": "medium",
+   "comments": 36,
+   "stance_error_rate": 0.1111111111
+  }
+ ],
+ "errors": [
+  {
+   "comment_id": "FTC-2026-1057-0891",
+   "text": "I am shocked that you are considering allowing companies to charge what they think you can afford. This is discrimination by retailers.",
+   "gold": "unclear",
+   "claude": "stronger_action",
+   "confidence": "medium",
+   "quote": "allowing companies to charge what they think you can afford. This is discrimination by retailers."
+  },
+  {
+   "comment_id": "FTC-2026-1057-1729",
+   "text": "It is so devious to have different prices for different people, regardless of criteria. To allow this to continue, will undermine the whole basis of commerce. If they haven\u2019t already, people will begi",
+   "gold": "unclear",
+   "claude": "stronger_action",
+   "confidence": "low",
+   "quote": "To allow this to continue, will undermine the whole basis of commerce."
+  },
+  {
+   "comment_id": "FTC-2026-1057-0340",
+   "text": "This is a purely totalitarian move by a giant corporation that has partially fused with part of the government, exactly the pattern we saw in fascist Italy and Germany in the 1930s and 40s. If you app",
+   "gold": "unclear",
+   "claude": "limit_or_oppose_intervention",
+   "confidence": "low",
+   "quote": "If you approve this, you demonstrate that you are utterly beholden to the corrupt anti-Americans who appointed you"
+  },
+  {
+   "comment_id": "FTC-2026-1057-0882",
+   "text": "So called \"personal pricing\" is a bias system made by to boost corporate profits and nothing more. Price gouging for the modern age. \n\nAI models are already notorious for miscalculations and there is ",
+   "gold": "mixed_or_conditional",
+   "claude": "stronger_action",
+   "confidence": "high",
+   "quote": "The price of an item should be based on ITS worth and value, NEVER the person buying it."
+  },
+  {
+   "comment_id": "FTC-2026-1057-1553",
+   "text": "One should not have to pay more than anyone else groceries, home goods, or gasoline.",
+   "gold": "stronger_action",
+   "claude": "unclear",
+   "confidence": "medium",
+   "quote": "One should not have to pay more than anyone else groceries, home goods, or gasoline."
+  },
+  {
+   "comment_id": "FTC-2026-1057-0474",
+   "text": "I have only heard bad things about this surveillance pricing. Businesses have made record profits already with the current system. It is clearly working just fine. We do not need to line their pockets",
+   "gold": "stronger_action",
+   "claude": "limit_or_oppose_intervention",
+   "confidence": "medium",
+   "quote": "Do not let this rule go into effect, it will not be good or helpful for American consumers like me"
+  },
+  {
+   "comment_id": "FTC-2026-1057-0038",
+   "text": "I oppose the FTC\u2019s personal pricing rule. Why should some folks pay more for a product or service just because research has been done on the consumer\u2019s background, assets and income? Whatever happened",
+   "gold": "unclear",
+   "claude": "limit_or_oppose_intervention",
+   "confidence": "low",
+   "quote": "Why should some folks pay more for a product or service just because research has been done on the consumer's background, assets and income?"
+  },
+  {
+   "comment_id": "FTC-2026-1057-0218",
+   "text": "Does the rule mean that the president wants Americans to pay more for food? Sounds like a great campaign issue for 3026 and 2028. Go ahead and approve ripping Americans off more than they already are ",
+   "gold": "unclear",
+   "claude": "limit_or_oppose_intervention",
+   "confidence": "medium",
+   "quote": "Go ahead and approve ripping Americans off more than they already are currently doing."
+  }
+ ],
+ "stance_tab": [
+  {
+   "stance": "stronger_action",
+   "comments": 1017,
+   "share": 0.6494252874,
+   "ci_low": 0.6254533781,
+   "ci_high": 0.6726658985,
+   "share_one_per_form_letter": 0.6468279922
+  },
+  {
+   "stance": "support_as_proposed",
+   "comments": 26,
+   "share": 0.0166028097,
+   "ci_low": 0.0113551191,
+   "ci_high": 0.0242162811,
+   "share_one_per_form_letter": 0.0170045782
+  },
+  {
+   "stance": "limit_or_oppose_intervention",
+   "comments": 39,
+   "share": 0.0249042146,
+   "ci_low": 0.0182709334,
+   "ci_high": 0.0338626488,
+   "share_one_per_form_letter": 0.0255068672
+  },
+  {
+   "stance": "mixed_or_conditional",
+   "comments": 10,
+   "share": 0.006385696,
+   "ci_low": 0.0034722716,
+   "ci_high": 0.0117149045,
+   "share_one_per_form_letter": 0.0065402224
+  },
+  {
+   "stance": "unclear",
+   "comments": 474,
+   "share": 0.3026819923,
+   "ci_low": 0.280433398,
+   "ci_high": 0.3258962753,
+   "share_one_per_form_letter": 0.3041203401
+  }
+ ],
+ "practice_tab": [
+  {
+   "group": "Against the practice (validated minimum)",
+   "comments": 1043,
+   "share": 0.6660280971,
+   "ci_low": 0.6422879234,
+   "ci_high": 0.6889557172
+  },
+  {
+   "group": "Partly against (some uses only)",
+   "comments": 10,
+   "share": 0.006385696,
+   "ci_low": 0.0034722716,
+   "ci_high": 0.0117149045
+  },
+  {
+   "group": "Against the FTC's rules (view of the practice not stated)",
+   "comments": 39,
+   "share": 0.0249042146,
+   "ci_low": 0.0182709334,
+   "ci_high": 0.0338626488
+  },
+  {
+   "group": "Did not say what should happen",
+   "comments": 474,
+   "share": 0.3026819923,
+   "ci_low": 0.280433398,
+   "ci_high": 0.3258962753
+  }
+ ],
+ "unsaid_evidence": {
+  "Give at least one objection reason": 0.6012658227848101,
+  "Negative tone (VADER)": 0.4978902953586498,
+  "Positive tone (VADER)": 0.3206751054852321
+ },
+ "reason_tab": [
+  {
+   "reason": "privacy_data_use",
+   "comments": 782,
+   "share": 0.4993614304,
+   "ci_low": 0.4746292499,
+   "ci_high": 0.5240967361,
+   "share_one_per_form_letter": 0.4970568999
+  },
+  {
+   "reason": "pricing_affordability_equal_treatment",
+   "comments": 762,
+   "share": 0.4865900383,
+   "ci_low": 0.4618979652,
+   "ci_high": 0.5113477407,
+   "share_one_per_form_letter": 0.4892086331
+  },
+  {
+   "reason": "fairness_discrimination_consumer_harm",
+   "comments": 747,
+   "share": 0.4770114943,
+   "ci_low": 0.4523600767,
+   "ci_high": 0.5017754192,
+   "share_one_per_form_letter": 0.4813603663
+  },
+  {
+   "reason": "transparency_disclosure",
+   "comments": 155,
+   "share": 0.0989782886,
+   "ci_low": 0.0851544168,
+   "ci_high": 0.1147647898,
+   "share_one_per_form_letter": 0.0974493133
+  },
+  {
+   "reason": "competition_business_economics",
+   "comments": 42,
+   "share": 0.0268199234,
+   "ci_low": 0.0199025502,
+   "ci_high": 0.0360530741,
+   "share_one_per_form_letter": 0.0274689339
+  },
+  {
+   "reason": "legal_authority_policy_scope",
+   "comments": 40,
+   "share": 0.0255427842,
+   "ci_low": 0.0188135801,
+   "ci_high": 0.0345940162,
+   "share_one_per_form_letter": 0.0261608895
+  },
+  {
+   "reason": "other",
+   "comments": 15,
+   "share": 0.0095785441,
+   "ci_low": 0.005813271,
+   "ci_high": 0.0157439752,
+   "share_one_per_form_letter": 0.0098103336
+  }
+ ],
+ "reasons_by_stance": [
+  {
+   "reason": "privacy_data_use",
+   "share_if_stronger_action": 0.622,
+   "share_if_other_stance": 0.271,
+   "chi2": 175.718,
+   "p_value": 0.0,
+   "cramers_v": 0.335,
+   "min_expected_count": 274.149
+  },
+  {
+   "reason": "fairness_discrimination_consumer_harm",
+   "share_if_stronger_action": 0.578,
+   "share_if_other_stance": 0.29,
+   "chi2": 118.996,
+   "p_value": 0.0,
+   "cramers_v": 0.276,
+   "min_expected_count": 261.879
+  },
+  {
+   "reason": "pricing_affordability_equal_treatment",
+   "share_if_stronger_action": 0.568,
+   "share_if_other_stance": 0.335,
+   "chi2": 77.601,
+   "p_value": 0.0,
+   "cramers_v": 0.223,
+   "min_expected_count": 267.138
+  },
+  {
+   "reason": "transparency_disclosure",
+   "share_if_stronger_action": 0.115,
+   "share_if_other_stance": 0.069,
+   "chi2": 8.396,
+   "p_value": 0.004,
+   "cramers_v": 0.073,
+   "min_expected_count": 54.339
+  },
+  {
+   "reason": "legal_authority_policy_scope",
+   "share_if_stronger_action": 0.033,
+   "share_if_other_stance": 0.011,
+   "chi2": 7.253,
+   "p_value": 0.007,
+   "cramers_v": 0.068,
+   "min_expected_count": 14.023
+  },
+  {
+   "reason": "other",
+   "share_if_stronger_action": 0.007,
+   "share_if_other_stance": 0.015,
+   "chi2": 2.222,
+   "p_value": 0.136,
+   "cramers_v": 0.038,
+   "min_expected_count": 5.259
+  },
+  {
+   "reason": "competition_business_economics",
+   "share_if_stronger_action": 0.023,
+   "share_if_other_stance": 0.035,
+   "chi2": 1.965,
+   "p_value": 0.161,
+   "cramers_v": 0.035,
+   "min_expected_count": 14.724
+  }
+ ],
+ "governance": [
+  {
+   "check": "Human stance kappa",
+   "value": 0.954,
+   "rule": ">=",
+   "threshold": 0.6,
+   "passed": true
+  },
+  {
+   "check": "Claude stance macro-F1 (judged stances)",
+   "value": 0.925,
+   "rule": ">=",
+   "threshold": 0.7,
+   "passed": true
+  },
+  {
+   "check": "Lowest stance recall (categories with >= 5 gold)",
+   "value": 0.861,
+   "rule": ">=",
+   "threshold": 0.6,
+   "passed": true
+  },
+  {
+   "check": "Claude reason micro-F1",
+   "value": 0.78,
+   "rule": ">=",
+   "threshold": 0.7,
+   "passed": true
+  },
+  {
+   "check": "Stance stability across 3 runs",
+   "value": 0.9,
+   "rule": ">=",
+   "threshold": 0.9,
+   "passed": true
+  },
+  {
+   "check": "Worst length-group error ratio",
+   "value": 5.833,
+   "rule": "<=",
+   "threshold": 1.25,
+   "passed": false
+  },
+  {
+   "check": "Low-confidence share (production)",
+   "value": 0.12,
+   "rule": "<=",
+   "threshold": 0.15,
+   "passed": true
+  },
+  {
+   "check": "Invalid-answer share (production)",
+   "value": 0.0,
+   "rule": "<=",
+   "threshold": 0.02,
+   "passed": true
+  },
+  {
+   "check": "Evidence quote found in comment (production)",
+   "value": 0.953,
+   "rule": ">=",
+   "threshold": 0.95,
+   "passed": true
+  }
+ ],
+ "review_counts": {
+  "low confidence": 188,
+  "invalid answer": 0,
+  "quote not found": 73
+ },
+ "review_total": 256,
+ "audit_total": 78,
+ "cost_per_variant": [
+  {
+   "variant": "fewshot",
+   "calls": 80,
+   "mean_input_tokens": 5073.4375,
+   "mean_output_tokens": 130.2875,
+   "cost_per_comment": 0.0005724875,
+   "total_cost": 0.045799,
+   "total_minutes": 1.4291666667,
+   "median_seconds": 0.92
+  },
+  {
+   "variant": "smoketest",
+   "calls": 3,
+   "mean_input_tokens": 1673.6666666667,
+   "mean_output_tokens": 89.0,
+   "cost_per_comment": 0.0002118667,
+   "total_cost": 0.0006356,
+   "total_minutes": 0.045,
+   "median_seconds": 0.87
+  },
+  {
+   "variant": "zeroshot",
+   "calls": 1566,
+   "mean_input_tokens": 1723.8250319285,
+   "mean_output_tokens": 220.7975734355,
+   "cost_per_comment": 0.0002827813,
+   "total_cost": 0.4428355,
+   "total_minutes": 43.2735,
+   "median_seconds": 1.04
+  },
+  {
+   "variant": "zeroshot_rerun2",
+   "calls": 30,
+   "mean_input_tokens": 1749.5,
+   "mean_output_tokens": 259.6,
+   "cost_per_comment": 0.00030475,
+   "total_cost": 0.0091425,
+   "total_minutes": 0.7945,
+   "median_seconds": 1.535
+  },
+  {
+   "variant": "zeroshot_rerun3",
+   "calls": 30,
+   "mean_input_tokens": 1749.5,
+   "mean_output_tokens": 275.5333333333,
+   "cost_per_comment": 0.0003127167,
+   "total_cost": 0.0093815,
+   "total_minutes": 0.8221666667,
+   "median_seconds": 1.5
+  }
+ ],
+ "projection": [
+  {
+   "comments": 1000,
+   "llm_cost_usd": 0.2827812899,
+   "llm_hours": 0.4605523627,
+   "human_hours": 13.0479166667,
+   "human_cost_usd": 391.4375,
+   "llm_plus_review_usd": 19.8546562899
+  },
+  {
+   "comments": 10000,
+   "llm_cost_usd": 2.8278128991,
+   "llm_hours": 4.6055236271,
+   "human_hours": 130.4791666667,
+   "human_cost_usd": 3914.375,
+   "llm_plus_review_usd": 198.5465628991
+  },
+  {
+   "comments": 100000,
+   "llm_cost_usd": 28.2781289911,
+   "llm_hours": 46.0552362708,
+   "human_hours": 1304.7916666667,
+   "human_cost_usd": 39143.75,
+   "llm_plus_review_usd": 1985.4656289911
+  }
+ ],
+ "total_api_cost": 0.5077941,
+ "llm_cost_per_comment": 0.00028278128991060026,
+ "llm_seconds_per_comment": 1.6579885057471269,
+ "human_minutes_for_gold": 62.63,
+ "status": {
+  "stance": "validated",
+  "reasons": "validated"
+ },
+ "record": {
+  "python": "3.12.14",
+  "pandas": "3.0.5",
+  "numpy": "2.2.6",
+  "scikit-learn": "1.4.2",
+  "scipy": "1.14.1",
+  "anthropic": "2.3.0",
+  "seed": 20261027,
+  "model": "claude-haiku-5-5",
+  "sampling": "API default",
+  "effort": "low",
+  "prompt_version": "v2",
+  "comments_analyzed": 1566,
+  "pilot": 20,
+  "gold": 80,
+  "coders": "coder1, coder2",
+  "data_file_sha256": "8996de271e62c007"
+ }
+}
